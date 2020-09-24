@@ -41,10 +41,9 @@ public class Player {
 
     }
 
-    public void turn(Player target) {
+    public void turn(Player target, Scanner in) {
         int currentMana = manaTotal;
         int cardUse = 0;
-        Scanner in = new Scanner(System.in);
         System.out.println("\n\n\tIt is " + name + "'s turn.");
         deck.drawCard();
         System.out.println("Your health and armor is " + lifeTotal + " and " + armorTotal
@@ -94,7 +93,6 @@ public class Player {
             else
                 System.out.println("You've selected an invalid card.");
         }
-
     }
 
     @Override
