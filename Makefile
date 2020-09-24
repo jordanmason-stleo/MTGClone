@@ -1,8 +1,9 @@
 JCC = javac
 MAIN_CLASS = Driver
 OUT_JAR = MTGClone.jar
-
-JFLAGS = -g
+SQLITE_JDBC_JAR = sqlite-jdbc-3.32.3.2.jar
+SQLITE_JDBC = https://github.com/xerial/sqlite-jdbc/releases/download/3.32.3.2/$(SQLITE_JDBC_JAR)
+JFLAGS = -g -classpath ".:$(SQLITE_JDBC_JAR)"
 
 default:
 	@echo \"make build\" to compile Java classes
@@ -10,7 +11,10 @@ default:
 	@echo \"make jar\" to compile executable jar
 	@echo \"make clean\" to clean up artifacts
 
-build: 
+sqlite_jdbc:
+	wget -N $(SQLITE_JDBC)
+
+build: sqlite_jdbc
 	$(JCC) $(JFLAGS) $(MAIN_CLASS).java
 
 run: jar 
@@ -18,7 +22,7 @@ run: jar
 
 jar: build
 	@echo "Manifest-Version: 1.0" > manifest.txt
-	@echo "Class-Path: ." >> manifest.txt
+	@echo "Class-Path: ./sqlite-jdbc-3.32.3.2.jar" >> manifest.txt
 	@echo "Main-Class: $(MAIN_CLASS)" >> manifest.txt
 	@echo "" >> manifest.txt
 	jar -cmf manifest.txt $(OUT_JAR) *.class
@@ -27,5 +31,7 @@ jar: build
 
 clean:
 	$(RM) *.class
+	$(RM) cards.db
 	$(RM) manifest.txt
 	$(RM) $(OUT_JAR)
+	$(RM) $(SQLITE_JDBC_JAR)
