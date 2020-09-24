@@ -1,3 +1,5 @@
+package MTGClone;
+
 public class Card{
     protected String cardName;
     protected int manaCost;

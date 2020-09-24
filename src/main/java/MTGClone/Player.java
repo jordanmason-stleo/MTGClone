@@ -1,3 +1,4 @@
+package MTGClone;
 import java.util.Scanner;
 
 public class Player {

@@ -1,5 +1,6 @@
+package MTGClone;
 import java.util.Scanner;
-public class Driver {
+public class App {
    public static void main(String[] args) {
        Scanner in = new Scanner(System.in);
        System.out.print("Enter Player One's name: ");
