@@ -1,8 +1,9 @@
 JCC = javac
 MAIN_CLASS = Driver
 OUT_JAR = MTGClone.jar
-SQLITE_JDBC_JAR = sqlite-jdbc-3.32.3.2.jar
-SQLITE_JDBC = https://github.com/xerial/sqlite-jdbc/releases/download/3.32.3.2/$(SQLITE_JDBC_JAR)
+SQLITE_JDBC_VER = 3.32.3.2
+SQLITE_JDBC_JAR = sqlite-jdbc-$(SQLITE_JDBC_VER).jar
+SQLITE_JDBC = https://github.com/xerial/sqlite-jdbc/releases/download/$(SQLITE_JDBC_VER)/$(SQLITE_JDBC_JAR)
 JFLAGS = -g -classpath ".:$(SQLITE_JDBC_JAR)"
 
 default:
