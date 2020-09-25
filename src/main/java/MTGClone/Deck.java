@@ -1,3 +1,5 @@
+package MTGClone;
+
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -5,6 +7,7 @@ public class Deck {
     protected ArrayList<Card> topdeck;
     protected ArrayList<Card> discard;
     protected ArrayList<Card> hand;
+
     public Card drawCard(){
         if (topdeck.size()<=0)
             return null;
@@ -15,25 +18,15 @@ public class Deck {
         
     }
     public Deck() {
-        topdeck=new ArrayList<Card>();
-        discard=new ArrayList<Card>();
-        hand=new ArrayList<Card>();
-        for (int i = 0; i < 4; i++){
-            topdeck.add(new Card("Devouring Dragon", 5, 5, 6, "He does to people what Greg does to booty.", "", "Dragon"));
-            topdeck.add(new Card("Dragon Worshipper", 1, 1, 1, "He spends his days praying to dragons.", "", "Human"));
-            topdeck.add(new Card("Dragon Whelp", 2, 3, 2, "He'll get there.", "", "Dragon"));
-            topdeck.add(new Card("Dragon Egg", 1, 0, 2, "Close to hatching!", "", "Egg"));
-            topdeck.add(new Card("Lingering Flame", 3, 4, 3, "He lives among the dragons.", "", "Elemental"));
-            topdeck.add(new Card("Dragonguard Sentry", 1, 1, 2, "Devoted to the protection of the dragonflight.", "", "Human"));
-            topdeck.add(new Card("Withering Flamewitch", 2, 4, 2, "Her flame bites deep.", "", "Human"));
-            topdeck.add(new Card("Final Examination", 6, 9000, 0, "Oh dear, Greg.", "", "Parchment"));
-            topdeck.add(new Card("Drunken Dragon", 3, 4, 1, "He's trying.", "", "Dragon"));
-        }
-        for (int i = 0; i < 24; i++){
-            topdeck.add(new Card("Isle of Power", -1, 0, 0, "Invoke this for mana.", "", "Land"));
+        SQLDriver d = new SQLDriver();
+        d.setupTable();
+        topdeck = new ArrayList<Card>();
+        hand = new ArrayList<Card>();
+        discard = new ArrayList<Card>();
+        for (int i = 0; i < 60; i++){
+            topdeck.add(d.getRandomCard());
         }
         Shuffle();
-        
         for (int i = 0; i < 7; i++){
             drawCard();
         }

@@ -1,3 +1,6 @@
 *.class
 manifest.txt
 *.jar
+target/
+.DS_Store
+cards.db

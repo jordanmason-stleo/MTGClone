@@ -1,3 +1,5 @@
+package MTGClone;
+
 public class Card{
     protected String cardName;
     protected int manaCost;
@@ -70,7 +72,8 @@ public class Card{
         return "Card [cardName=" + cardName + ", creatureType=" + creatureType + ", description=" + description
                 + ", image=" + image + ", manaCost=" + manaCost + ", power=" + power + ", toughness=" + toughness + "]";
     }
-
+    
+    public Card() {}
     public Card(String cardName, int manaCost, int power, int toughness, String description, String image,
             String creatureType) {
         this.cardName = cardName;

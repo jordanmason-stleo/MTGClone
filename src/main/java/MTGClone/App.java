@@ -1,5 +1,6 @@
+package MTGClone;
 import java.util.Scanner;
-public class Driver {
+public class App {
    public static void main(String[] args) {
        Scanner in = new Scanner(System.in);
        System.out.print("Enter Player One's name: ");
@@ -17,10 +18,10 @@ public class Driver {
 
         while(player1.lifeTotal>=0&&player2.lifeTotal>=0){
             if (game.player1.lifeTotal>0)
-                game.Turn(game.player1,game.player2);
+                game.Turn(game.player1,game.player2,in);
                 System.out.println("------------------------------------------------------------------------------------------------------------------------------");
             if (game.player2.lifeTotal>0)
-                game.Turn(game.player2,game.player1);
+                game.Turn(game.player2,game.player1,in);
                 System.out.println("------------------------------------------------------------------------------------------------------------------------------");
         }
         in.close();

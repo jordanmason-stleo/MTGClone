@@ -1,4 +1,8 @@
+package MTGClone;
+
 import java.util.ArrayList; 
+import java.util.Scanner;
+
 public class Game {
     protected Player player1;
     protected Player player2;
@@ -53,8 +57,8 @@ public class Game {
         this.player2Field=new ArrayList<Card>(); 
     }
 
-    public void Turn(Player player,Player target) {
-        player.turn(target);
+    public void Turn(Player player,Player target, Scanner in) {
+        player.turn(target, in);
     }
     
 }
