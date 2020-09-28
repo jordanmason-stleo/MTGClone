@@ -8,10 +8,17 @@
   clear: both;
 }
 
+td, th{
+    padding: 5px 5px 5px 5px;
+
+        }
+table, td, th{
+    border: 1px solid black;
+    border-collapse: collapse;
+}
 .container input {
   width: 100%;
   clear: both;
-
 
 }
     </style>
@@ -37,9 +44,11 @@
         <input type="text" id="creaturetype" name="creaturetype"><br>
         <br> <input style="width:30%;display:block;margin:0 auto;" type="submit" value="Submit">
       </form>
-
       </div>
-      <table style="width:100%">
+      <br>
+      <br>
+      
+      <table style>
         <tr>
           <th>Card Name</th>
           <th>Mana Cost</th>
@@ -48,20 +57,23 @@
           <th>Description</th>
           <th>Creature Type</th>
         </tr>
-        <tr>
+        
         <c:if test="${not empty allcards}">
             
                <c:forEach var="listValue" items="${allcards}">
+                   <tr></tr>
                    <td>${listValue.cardName}</td>
                    <td>${listValue.manaCost}</td>
                     <td>${listValue.power}</td>
                     <td>${listValue.toughness}</td>
                     <td>${listValue.description}</td>
                     <td>${listValue.creatureType}</td>
+                    </tr>
                </c:forEach>
             
         </c:if>
-        </tr>
+        
       </table>
+    
 </body>
 </html>
