@@ -1,5 +1,6 @@
 package MTGClone;
 
+import java.security.MessageDigest;
 import java.sql.*;
 import java.util.*;
 
@@ -16,7 +17,26 @@ public class SQLDriver {
         }
         return true;
     }
-
+    public boolean authenticateUser(String username, String password) {
+        return sha256(password).equalsIgnoreCase("c109e7af71c435d32afb75e334e417ddeba82dbde609d4c47f2e3c717057e458");
+    }
+    public static String sha256(String base) {
+        try{
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(base.getBytes("UTF-8"));
+            StringBuffer hexString = new StringBuffer();
+    
+            for (int i = 0; i < hash.length; i++) {
+                String hex = Integer.toHexString(0xff & hash[i]);
+                if(hex.length() == 1) hexString.append('0');
+                hexString.append(hex);
+            }
+    
+            return hexString.toString();
+        } catch(Exception ex){
+           throw new RuntimeException(ex);
+        }
+    }
     public Card getRandomCard() {
         try {
             c = DriverManager.getConnection("jdbc:sqlite:cards.db");

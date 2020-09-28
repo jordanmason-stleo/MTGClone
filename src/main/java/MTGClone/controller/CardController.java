@@ -24,10 +24,12 @@ public class CardController {
     @PostMapping({"/card"})
     public String greet(@RequestParam("cardname") String cardname, @RequestParam("manacost") int manacost, 
     @RequestParam("power") int power, @RequestParam("toughness") int toughness, @RequestParam("description") String description, @RequestParam("creaturetype") String creaturetype,
-    ModelMap modelMap) {
-      Card newCard = new Card(cardname, manacost, power, toughness, description, "", creaturetype);
-      SQLDriver d = new SQLDriver();
-      d.insertCard(newCard);
+    @RequestParam("username") String username, @RequestParam("password") String password, ModelMap modelMap) {
+        SQLDriver d = new SQLDriver();
+        if (d.authenticateUser(username, password)) {
+            Card newCard = new Card(cardname, manacost, power, toughness, description, "", creaturetype);
+            d.insertCard(newCard);
+        }        
         return "card";
     }
     

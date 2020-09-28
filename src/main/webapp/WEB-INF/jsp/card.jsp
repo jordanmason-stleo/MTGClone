@@ -42,6 +42,11 @@ table, td, th{
         <input type="text" id="description" name="description"><br>
         <label for="creaturetype">Creature Type:</label>
         <input type="text" id="creaturetype" name="creaturetype"><br>
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username"><br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password"><br>
+        
         <br> <input style="width:30%;display:block;margin:0 auto;" type="submit" value="Submit">
       </form>
       </div>
