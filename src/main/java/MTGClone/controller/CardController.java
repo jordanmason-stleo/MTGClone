@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 @Controller
 public class CardController {
-    @GetMapping({"/card"})
+    @GetMapping({"/card", "/"})
     public String hello(Model model) {
         ArrayList<Card> allCards = (new SQLDriver()).getAllCards();
         model.addAttribute("allcards", allCards);
