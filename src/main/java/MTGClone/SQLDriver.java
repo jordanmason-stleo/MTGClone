@@ -55,6 +55,46 @@ public class SQLDriver {
         return null;
     }
 
+    public ArrayList<Card> getAllCards() {
+        ArrayList<Card> topdeck = new ArrayList<Card>();
+        try {
+            c = DriverManager.getConnection("jdbc:sqlite:cards.db");
+            c.setAutoCommit(false);
+
+            Statement stmt = c.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM CARDS;");
+            String cardName = "";
+            int manaCost = 0;
+            int power = 0;
+            int toughness = 0;
+            String description = "";
+            String image = "";
+            String creatureType = "";
+            
+            while (rs.next()) {
+                cardName = rs.getString("CARDNAME");
+                manaCost = rs.getInt("MANACOST");
+                power = rs.getInt("POWER");
+                toughness = rs.getInt("TOUGHNESS");
+                description = rs.getString("DESCRIPTION");
+                image = rs.getString("IMAGE");
+                creatureType = rs.getString("CREATURETYPE");
+                Card card = new Card(cardName, manaCost, power, toughness, description, image, creatureType);
+                topdeck.add(card);
+            }
+            rs.close();
+            stmt.close();
+            c.close();
+            
+            return topdeck;
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
+        System.err.println("Returning null.");
+        return null;
+    }
+
     public boolean insertCard(Card card) {
         Statement stmt = null;
         try {
