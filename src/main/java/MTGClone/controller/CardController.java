@@ -21,6 +21,8 @@ public class CardController {
         return "card";
     }
     
+    
+    
     @PostMapping({"/card"})
     public String greet(@RequestParam("cardname") String cardname, @RequestParam("manacost") int manacost, 
     @RequestParam("power") int power, @RequestParam("toughness") int toughness, @RequestParam("description") String description, @RequestParam("creaturetype") String creaturetype,
