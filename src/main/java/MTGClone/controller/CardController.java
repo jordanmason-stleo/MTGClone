@@ -1,5 +1,6 @@
 package MTGClone.controller;
 
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -14,24 +15,22 @@ import java.util.ArrayList;
 @Controller
 public class CardController {
     @GetMapping({"/card", "/"})
-    public String hello(Model model) {
+    public String showCards(Model model) {
         ArrayList<Card> allCards = (new SQLDriver()).getAllCards();
         model.addAttribute("allcards", allCards);
-        
         return "card";
     }
-    
-    
-    
-    @PostMapping({"/card"})
-    public String greet(@RequestParam("cardname") String cardname, @RequestParam("manacost") int manacost, 
-    @RequestParam("power") int power, @RequestParam("toughness") int toughness, @RequestParam("description") String description, @RequestParam("creaturetype") String creaturetype,
-    @RequestParam("username") String username, @RequestParam("password") String password, ModelMap modelMap) {
+
+    @PostMapping({"/card", "/"})
+    public String newCard(@RequestParam("cardname") String cardname, @RequestParam("manacost") int manacost, 
+    @RequestParam("power") int power, @RequestParam("toughness") int toughness, @RequestParam("description") String description,
+    @RequestParam("creaturetype") String creaturetype, ModelMap modelMap) {
         SQLDriver d = new SQLDriver();
-        if (d.authenticateUser(username, password)) {
-            Card newCard = new Card(cardname, manacost, power, toughness, description, "", creaturetype);
-            d.insertCard(newCard);
-        }        
+        System.out.println(creaturetype);
+        System.out.println("Posting to /card detected");
+        Card newCard = new Card(cardname, manacost, power, toughness, description, "", creaturetype);
+        d.insertCard(newCard);
+        //modelMap.addAttribute("allcards", d.getAllCards()); 
         return "card";
     }
     
