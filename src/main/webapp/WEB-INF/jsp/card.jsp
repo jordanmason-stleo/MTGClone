@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
    <head>
      <link href="https://fonts.googleapis.com/css2?family=Ubuntu&display=swap" rel="stylesheet">
@@ -33,11 +34,16 @@ table, td, th{
     <title>Hello ${name}!</title>
 </head>
 <body style="background-color:#0F0F0F;font-family: 'Ubuntu', sans-serif;">
+  <sec:authorize access="isAnonymous()">
   <li><a href="/login" style="color:#C10E0E">Login / Sign Up</a></li> </ul>
+</sec:authorize>
+<sec:authorize access="isAuthenticated()">
+  <li><a href="/logout" style="color:#C10E0E">Log Out</a></li> </ul>
+</sec:authorize>
     <h2 style="color:#CFCACA;position:relative;left:820px;">Magic Card Creator</h2>
    
     <div class="container">
-    
+      <sec:authorize access="isAuthenticated()">
     <form action="#" method="post" th:action="@{/card}" >
         <br><br><label style="left:210px;font-size:26px;"for="cardname">Card Name:</label>
         <input style="left:210px;font-size:24px;width:300px;"placeholder="Card Title"type="text" id="cardname" name="cardname"><br><br>
@@ -61,7 +67,7 @@ table, td, th{
       </form>
       </div>
       <br>
-      
+    </sec:authorize>
       
       <table style>
         <tr>
