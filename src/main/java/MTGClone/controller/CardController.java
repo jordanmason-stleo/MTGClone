@@ -26,11 +26,8 @@ public class CardController {
     @RequestParam("power") int power, @RequestParam("toughness") int toughness, @RequestParam("description") String description,
     @RequestParam("creaturetype") String creaturetype, ModelMap modelMap) {
         SQLDriver d = new SQLDriver();
-        System.out.println(creaturetype);
-        System.out.println("Posting to /card detected");
         Card newCard = new Card(cardname, manacost, power, toughness, description, "", creaturetype);
         d.insertCard(newCard);
-        //modelMap.addAttribute("allcards", d.getAllCards()); 
         return "card";
     }
     
