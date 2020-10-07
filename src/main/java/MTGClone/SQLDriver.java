@@ -18,6 +18,24 @@ public class SQLDriver {
         return true;
     }
     public boolean authenticateUser(String username, String password) {
+	try {
+            c = DriverManager.getConnection("jdbc:sqlite:cards.db");
+            c.setAutoCommit(false);
+	    String query = "SELECT sha256_pass FROM USERS WHERE email = ?";
+	    PreparedStatement stmt = c.prepareStatement(query);
+	    stmt.setString(1, username);
+	    ResultSet rs = stmt.executeQuery();
+	    while (rs.next()) {
+		if (rs.getString("sha256_pass").equalsIgnoreCase(sha256(password))) {
+		    return true;
+		} else {
+		    System.out.println(rs.getString("sha256_pass") + " not equal to " + sha256(password));
+		}
+	    }
+	} catch (Exception e) {
+	   System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            
+	}
         return sha256(password).equalsIgnoreCase("c109e7af71c435d32afb75e334e417ddeba82dbde609d4c47f2e3c717057e458");
     }
     public static String sha256(String base) {
