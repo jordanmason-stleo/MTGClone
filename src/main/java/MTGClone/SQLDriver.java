@@ -11,55 +11,62 @@ public class SQLDriver {
         try {
             Class.forName("org.sqlite.JDBC");
             c = DriverManager.getConnection("jdbc:sqlite:cards.db");
+            c.setAutoCommit(false);
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             return false;
         }
         return true;
     }
+
     public boolean authenticateUser(String username, String password) {
-	try {
-            c = DriverManager.getConnection("jdbc:sqlite:cards.db");
-            c.setAutoCommit(false);
-	    String query = "SELECT sha256_pass FROM USERS WHERE email = ?";
-	    PreparedStatement stmt = c.prepareStatement(query);
-	    stmt.setString(1, username);
-	    ResultSet rs = stmt.executeQuery();
-	    while (rs.next()) {
-		if (rs.getString("sha256_pass").equalsIgnoreCase(sha256(password))) {
-		    return true;
-		} else {
-		    System.out.println(rs.getString("sha256_pass") + " not equal to " + sha256(password));
-		}
-	    }
-	} catch (Exception e) {
-	   System.err.println(e.getClass().getName() + ": " + e.getMessage());
-            
-	}
+        if (!tryConnect()) {
+            return false;
+        }
+        try {
+
+            String query = "SELECT sha256_pass FROM USERS WHERE email = ?";
+            PreparedStatement stmt = c.prepareStatement(query);
+            stmt.setString(1, username);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                if (rs.getString("sha256_pass").equalsIgnoreCase(sha256(password))) {
+                    return true;
+                } else {
+                    System.out.println(rs.getString("sha256_pass") + " not equal to " + sha256(password));
+                }
+            }
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+
+        }
         return sha256(password).equalsIgnoreCase("c109e7af71c435d32afb75e334e417ddeba82dbde609d4c47f2e3c717057e458");
     }
+
     public static String sha256(String base) {
-        try{
+        try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
             byte[] hash = digest.digest(base.getBytes("UTF-8"));
             StringBuffer hexString = new StringBuffer();
-    
+
             for (int i = 0; i < hash.length; i++) {
                 String hex = Integer.toHexString(0xff & hash[i]);
-                if(hex.length() == 1) hexString.append('0');
+                if (hex.length() == 1)
+                    hexString.append('0');
                 hexString.append(hex);
             }
-    
+
             return hexString.toString();
-        } catch(Exception ex){
-           throw new RuntimeException(ex);
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
         }
     }
-    public Card getRandomCard() {
-        try {
-            c = DriverManager.getConnection("jdbc:sqlite:cards.db");
-            c.setAutoCommit(false);
 
+    public Card getRandomCard() {
+        if (!tryConnect()) {
+            return null;
+        }
+        try {
             Statement stmt = c.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM CARDS ORDER BY RANDOM() LIMIT 1;");
             String cardName = "";
@@ -95,10 +102,10 @@ public class SQLDriver {
 
     public ArrayList<Card> getAllCards() {
         ArrayList<Card> topdeck = new ArrayList<Card>();
+        if (!tryConnect()) {
+            return null;
+        }
         try {
-            c = DriverManager.getConnection("jdbc:sqlite:cards.db");
-            c.setAutoCommit(false);
-
             Statement stmt = c.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM CARDS;");
             String cardName = "";
@@ -108,7 +115,7 @@ public class SQLDriver {
             String description = "";
             String image = "";
             String creatureType = "";
-            
+
             while (rs.next()) {
                 cardName = rs.getString("CARDNAME");
                 manaCost = rs.getInt("MANACOST");
@@ -123,7 +130,7 @@ public class SQLDriver {
             rs.close();
             stmt.close();
             c.close();
-            
+
             return topdeck;
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
@@ -135,14 +142,15 @@ public class SQLDriver {
 
     public boolean insertCard(Card card) {
         Statement stmt = null;
+        if (!tryConnect()) {
+            return false;
+        }
         try {
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:cards.db");
             c.setAutoCommit(false);
             String baseStmt = "INSERT INTO CARDS (CARDNAME,MANACOST,POWER,TOUGHNESS,DESCRIPTION,IMAGE,CREATURETYPE) VALUES ";
             stmt = c.createStatement();
-            String sql = "(\'" + card.cardName + "\'," + card.manaCost + "," + card.power + "," + card.toughness + ", \'"
-                    + card.description + "\',\'" + card.image + "\',\'" + card.creatureType + "\');";
+            String sql = "(\'" + card.cardName + "\'," + card.manaCost + "," + card.power + "," + card.toughness
+                    + ", \'" + card.description + "\',\'" + card.image + "\',\'" + card.creatureType + "\');";
             stmt.executeUpdate(baseStmt + sql);
             stmt.close();
             c.commit();
@@ -156,6 +164,9 @@ public class SQLDriver {
     }
 
     public boolean setupCards() {
+        if (!tryConnect()) {
+            return false;
+        }
         ArrayList<Card> topdeck = new ArrayList<Card>();
         topdeck.add(new Card("Devouring Dragon", 5, 5, 6, "He does to people what Greg does to booty.", "", "Dragon"));
         topdeck.add(new Card("Dragon Worshipper", 1, 1, 1, "He spends his days praying to dragons.", "", "Human"));
@@ -178,9 +189,10 @@ public class SQLDriver {
 
     public boolean setupTable() {
         Statement stmt = null;
+        if (!tryConnect()) {
+            return false;
+        }
         try {
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:cards.db");
             stmt = c.createStatement();
             String sql = "CREATE TABLE CARDS " + "(ID INTEGER PRIMARY KEY AUTOINCREMENT    NOT NULL,"
                     + " CARDNAME       TEXT    NOT NULL, " + " MANACOST       INT     NOT NULL, "
