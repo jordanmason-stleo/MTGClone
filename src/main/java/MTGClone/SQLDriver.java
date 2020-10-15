@@ -15,30 +15,21 @@ public class SQLDriver {
         StackTraceElement ste = stacktrace[3];
         // If it's a controller, we're running in servlet
         boolean isServer = ste.getClassName().contains("MTGClone.controller");
-        if (isServer) {
-            System.out.println("Server detected!");
-            try {
+        try {
+            if(isServer) {
                 Class.forName("com.mysql.jdbc.Driver");  
                 FileInputStream input = new FileInputStream("database.properties");
                 Properties props = new Properties();
                 props.load(input );
                 c = DriverManager.getConnection(props.getProperty("DB_URL"),props.getProperty("DB_USERNAME"),props.getProperty("DB_PASSWORD"));
-                c.setAutoCommit(false);
-            } catch (Exception e) {
-                System.err.println(e.getClass().getName() + ": " + e.getMessage());
-                return false;
-            }
-
-            return false;
-        } else {
-            try {
+            } else {
                 Class.forName("org.sqlite.JDBC");
                 c = DriverManager.getConnection("jdbc:sqlite:cards.db");
-                c.setAutoCommit(false);
-            } catch (Exception e) {
-                System.err.println(e.getClass().getName() + ": " + e.getMessage());
-                return false;
             }
+            c.setAutoCommit(false);
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            return false;
         }
         return true;
     }
