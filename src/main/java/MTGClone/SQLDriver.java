@@ -1,5 +1,6 @@
 package MTGClone;
 
+import java.io.FileInputStream;
 import java.security.MessageDigest;
 import java.sql.*;
 import java.util.*;
@@ -8,9 +9,23 @@ public class SQLDriver {
     protected Connection c = null;
 
     public boolean tryConnect() {
+        // Get the current stacktrace
+        StackTraceElement[] stacktrace = Thread.currentThread().getStackTrace();
+        // Get the caller of that called Deck, not SQLDriver
+        StackTraceElement ste = stacktrace[3];
+        // If it's a controller, we're running in servlet
+        boolean isServer = ste.getClassName().contains("MTGClone.controller");
         try {
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:cards.db");
+            if(isServer) {
+                Class.forName("com.mysql.jdbc.Driver");  
+                FileInputStream input = new FileInputStream("database.properties");
+                Properties props = new Properties();
+                props.load(input );
+                c = DriverManager.getConnection(props.getProperty("DB_URL"),props.getProperty("DB_USERNAME"),props.getProperty("DB_PASSWORD"));
+            } else {
+                Class.forName("org.sqlite.JDBC");
+                c = DriverManager.getConnection("jdbc:sqlite:cards.db");
+            }
             c.setAutoCommit(false);
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
@@ -201,6 +216,7 @@ public class SQLDriver {
                     + " CREATURETYPE   TEXT    NOT NULL)";
             stmt.executeUpdate(sql);
             stmt.close();
+            c.commit();
             c.close();
             if (!setupCards()) {
                 System.exit(-1);

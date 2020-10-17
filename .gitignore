@@ -4,3 +4,4 @@ manifest.txt
 target/
 .DS_Store
 cards.db
+database.properties
